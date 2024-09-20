@@ -1,7 +1,7 @@
 spring.application.name: junit-course
 spring:
-  profiles:
-    active: dev
+#  profiles:
+#    active: dev
   jpa:
     database: postgresql
     generate-ddl: true
