@@ -10,8 +10,11 @@ class UserService {
 
     private final UserRepository userRepository;
 
-    UserService(UserRepository userRepository) {
+    private final EmailVerifierApi emailVerifierApi;
+
+    UserService(UserRepository userRepository, EmailVerifierApi emailVerifierApi) {
         this.userRepository = userRepository;
+        this.emailVerifierApi = emailVerifierApi;
     }
 
     /**
@@ -25,12 +28,15 @@ class UserService {
         if (user == null) {
             throw new IllegalArgumentException("user is null");
         }
+
+        emailVerifierApi.checkEmail(user.getEmail());
+
         user.setPassword(hashPassword(user.getPassword()));
 
         return userRepository.save(user);
     }
 
-    private String hashPassword(String password) {
+    String hashPassword(String password) {
         return "hashedPassword:" + password;
         //return "";
     }
