@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.User;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
@@ -28,7 +29,7 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 @ActiveProfiles("test")
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerTest {
+class UserControllerTest extends AbstractIntegrationTest {
 
     private static final Long nonExistingUserId = 1L; // We know that [1, 9] ids don't belong to any user
 
