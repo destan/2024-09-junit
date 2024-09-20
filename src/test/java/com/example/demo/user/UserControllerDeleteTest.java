@@ -1,5 +1,6 @@
 package com.example.demo.user;
 
+import com.example.demo.AbstractIntegrationTest;
 import com.example.demo.User;
 import io.restassured.RestAssured;
 import org.junit.jupiter.api.*;
@@ -17,7 +18,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 @ActiveProfiles("test")
 @TestMethodOrder(OrderAnnotation.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-class UserControllerDeleteTest {
+class UserControllerDeleteTest extends AbstractIntegrationTest {
 
     @LocalServerPort
     private int port;
