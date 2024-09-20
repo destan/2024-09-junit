@@ -3,7 +3,10 @@ package com.example.demo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.*;
+import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.util.stream.Stream;
 
@@ -11,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TcknValidatorBasicCase {
 
-    TcknValidator tcknValidator = new TcknValidator();
+    TcknValidator tcknValidator = new TcknValidator(new TcknBlacklist());
 
     @Test
     @DisplayName("Validator returns true for valid tckn")

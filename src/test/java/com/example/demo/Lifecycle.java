@@ -25,6 +25,7 @@ class Lifecycle {
 
     @Test
     void someTest() {
+        System.out.println("Thread someTest " + Thread.currentThread().getName() + "  " + this.hashCode());
         System.out.println("Running some test...");
         assertTrue(true);
     }
@@ -32,7 +33,9 @@ class Lifecycle {
     @Test
     void otherTest() {
 
-        assumeTrue(true);
+        //assertTrue(false);
+
+        assumeTrue(false);
 
         System.out.println("Running another test...");
         assertNotEquals(1, 42, "Why would these be the same?");

@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    username: devuser
+    password: devpassword
+    url: jdbc:postgresql://localhost:5432/junit_db

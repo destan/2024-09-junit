@@ -1,0 +1,14 @@
+spring:
+  sql:
+    init:
+      mode: always
+
+  datasource:
+    username: devuser
+    password: devpassword
+    url: jdbc:postgresql://localhost:5432/junit_test_db
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    defer-datasource-initialization: true

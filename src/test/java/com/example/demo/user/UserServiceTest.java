@@ -1,20 +1,37 @@
 package com.example.demo.user;
 
 import com.example.demo.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class UserServiceTest {
 
-    UserService userService = new UserService();
+    @Mock
+    private UserRepository userRepository;
+
+    private UserService userService;
+
+    @BeforeEach
+    void setUp() {
+        userService = new UserService(userRepository);
+    }
 
     @Test
     @DisplayName("Persisted user should have an id")
     void nonNullId() {
         User user = new User("deneme@example.com", "123", "user", "deneme");
+
+        when(userRepository.save(user)).thenReturn(new User(1L, "deneme@example.com", "123", "user", "deneme"));
+
+        assertNull(user.getId());
         User persistedUser = userService.persist(user);
         assertNotNull(persistedUser.getId());
     }
@@ -22,7 +39,13 @@ class UserServiceTest {
     @Test
     @DisplayName("Persisted user fields should remain the same")
     void fieldsRemainSame() {
-        User user = new User("deneme@example.com", "123", "user", "deneme");
+        String mail = "deneme@example.com";
+        String role = "user";
+        String username = "deneme";
+        User user = new User(mail, "123", role, username);
+
+        when(userRepository.save(user)).thenReturn(user);
+
         User persistedUser = userService.persist(user);
 
         //assertEquals("deneme@example.com", persistedUser.getEmail());
@@ -35,20 +58,37 @@ class UserServiceTest {
         //
         //assertAll("fields stay the same", e1, e2, e3);
 
-        assertAll("fields stay the same",
-                    () -> assertEquals("deneme@example.com", persistedUser.getEmail()),
-                    () -> assertEquals("user2", persistedUser.getRole()),
-                    () -> assertEquals("deneme2", persistedUser.getUsername())
-                );
+        assertAll("fields stay the same", () -> assertEquals(mail, persistedUser.getEmail()), () -> assertEquals(role, persistedUser.getRole()), () -> assertEquals(username, persistedUser.getUsername()));
     }
 
     @Test
     @DisplayName("Persisted user's password should be hashed")
     void passwordHashing() {
-        User user = new User("deneme@example.com", "123", "user", "deneme");
+        String password = "123";
+        User user = new User("deneme@example.com", password, "user", "deneme");
+
+        when(userRepository.save(user)).thenReturn(user);
+
         User persistedUser = userService.persist(user);
 
-        assertNotEquals("123", persistedUser.getPassword());
+        assertNotNull(persistedUser.getPassword());
+        assertFalse(persistedUser.getPassword().isBlank());
+        assertNotEquals(password, persistedUser.getPassword());
+    }
+
+    @Test
+    @DisplayName("Hashing function should hash as expected")
+    void correctHashing() {
+        String password = "123";
+        String expectedHashedPassword = "hashedPassword:123";
+
+        User user = new User("deneme@example.com", password, "user", "deneme");
+
+        when(userRepository.save(user)).thenReturn(user);
+
+        User persistedUser = userService.persist(user);
+
+        assertEquals(expectedHashedPassword, persistedUser.getPassword());
     }
 
     @Test
@@ -57,5 +97,5 @@ class UserServiceTest {
         var e = assertThrows(IllegalArgumentException.class, () -> userService.persist(null));
         assertEquals("user is null", e.getMessage());
     }
-  
+
 }

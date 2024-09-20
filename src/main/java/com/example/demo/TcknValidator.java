@@ -2,6 +2,12 @@ package com.example.demo;
 
 public class TcknValidator {
 
+    private final TcknBlacklist blacklist;
+
+    TcknValidator(TcknBlacklist blacklist) {
+        this.blacklist = blacklist;
+    }
+
     public boolean validate(String tckn) {
 
         assert tckn != null : "tckn is null"; // -ea
@@ -18,6 +24,10 @@ public class TcknValidator {
             throw new IllegalArgumentException("Tckn cannot start with zero");
         }
 
+        if (blacklist.isBlacklisted(tckn)) {
+            throw new IllegalArgumentException("Tckn " + tckn + " is blacklisted");
+        }
+
         int oddSum = 0, evenSum = 0, controlDigit = 0;
         for (int i = 0; i <= 8; i++) {
             if (i % 2 == 0) {
@@ -32,15 +42,6 @@ public class TcknValidator {
             return false;
         }
         return Character.getNumericValue(tckn.charAt(10)) == (controlDigit + evenSum + oddSum) % 10;
-    }
-
-    public static void main(String[] args) {
-        TcknValidator validator = new TcknValidator();
-
-        System.out.println(validator.validate(null));
-
-        System.out.println(validator.validate("0123456789"));
-        System.out.println(validator.validate("32286582130"));
     }
 
 }
