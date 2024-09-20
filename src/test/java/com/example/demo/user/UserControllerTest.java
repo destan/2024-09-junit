@@ -31,6 +31,8 @@ import static org.junit.jupiter.api.Assumptions.assumeFalse;
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest extends AbstractIntegrationTest {
 
+    private static final Long nonExistingUserId = 1L; // We know that [1, 9] ids don't belong to any user
+
     public static final String USERNAME = "joe";
     public static final String ROLE = "USER";
     public static final String EMAIl = "joe@example.com";
@@ -46,14 +48,12 @@ class UserControllerTest extends AbstractIntegrationTest {
 
     private Long newUserId;
 
-    private Long nonExistingUserId;
-
-    @BeforeAll
-    void createNonExistingUserId() {
-        User saved = userRepository.save(new User("test@example.com", "testpassword", "USER", "test"));
-        nonExistingUserId = saved.getId();
-        userRepository.deleteById(nonExistingUserId);
-    }
+    //@BeforeAll
+    //void createNonExistingUserId() {
+    //    User saved = userRepository.save(new User("test@example.com", "testpassword", "USER", "test"));
+    //    nonExistingUserId = saved.getId();
+    //    userRepository.deleteById(nonExistingUserId);
+    //}
 
     @BeforeEach
     void setUp() {
